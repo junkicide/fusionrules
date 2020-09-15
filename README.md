@@ -165,3 +165,4 @@ version. For details, please refer to the GAP reference manual, as well as the
 file `LICENSE` in the root directory of the GAP distribution or see
 <https://www.gnu.org/licenses/gpl.html>.
 # fusionrules
+# fusionrules
