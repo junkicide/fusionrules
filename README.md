@@ -9,7 +9,9 @@ This is a GAP program to compute fusion rules for group-theoretical fusion categ
 
 ## Instructions
 
-This works best with the latest GAP version 4.11.0, it has not been tested with earlier versions. 
+Requires
+- GAP 4.11.0
+- the hapcocyclic package
 
 After having downloaded all the files above, navigate to the directory and launch GAP from there. Load the launch.g file as follows
 
