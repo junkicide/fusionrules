@@ -25,6 +25,17 @@ G:=SmallGroup(8, 3);
 fusion(G);
 ```
 
-This will print the fusion rules for all possible group theoretical fusion categories with G the dihedral group of size 8. For each group theoretical category it will also write the dimensions and the fusion rings to a file.
+This will print the fusion rules for all possible group theoretical fusion categories with G the dihedral group of size 8. For each group theoretical category it will also write the dimensions and the fusion rules to a file.
+
+Suppose we have a specific G and H, then we can do the following
 
 
+```console
+G:=SmallGroup(8, 3);
+H:= SubgroupsUptoAutomorphism(G)[1];
+coho:=GHCoho(G, H, 3)[3];
+GTCat(G, H, coho)
+```
+This will print the fusion rules for the group theoretical data (G, H, coho, 1).
+
+Please get in touch if you have any questions or comments.
