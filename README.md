@@ -38,4 +38,4 @@ GTCat(G, H, coho);
 ```
 This will print the fusion rules for the group theoretical data (G, H, coho, 1).
 
-Please get in touch if you have any questions or comments.
+Please get in touch if you have any questions or want to report a bug.
