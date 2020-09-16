@@ -33,8 +33,8 @@ Suppose we have a specific G and H, then we can do the following
 ```console
 G:=SmallGroup(8, 3);
 H:= SubgroupsUptoAutomorphism(G)[1];
-coho:=GHCoho(G, H, 3)[3];
-GTCat(G, H, coho)
+coho:=GHCoho(G, H, 3)[2];
+GTCat(G, H, coho);
 ```
 This will print the fusion rules for the group theoretical data (G, H, coho, 1).
 
