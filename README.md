@@ -5,8 +5,7 @@
 
 # fusionrules
 
-This is a GAP program to compute fusion rules for group-theoretical fusion categories. The theory explaining the algorithms used will be available on the arxiv soon enough. 
-
+This is a GAP program to compute fusion rules for group-theoretical fusion categories. The theory explaining the algorithm used is explained in chapter 4 of my PhD thesis, which can be found in the [thesis](https://github.com/junkicide/thesis/) repository.
 ## Instructions
 
 Requires
