@@ -17,7 +17,8 @@ After having downloaded all the files above, navigate to the directory and launc
 ```console
 Read("launch.g");
 ```
-This may throw an error, in which case repeating the same command works.
+If this doesn't work you may try with the absolute path to the file "launch.g".
+The read command may throw an error saying "Error, Variable: 'DeclarePackage' must have a value", in which case you should exit the break loop with Ctrl+D, and repeat the command above.
 
 Suppose we want to compute the fusion rules for all group theoretical categories (G, H, omega, 1) for a fixed G and all possible H and omega.
 
