@@ -17,8 +17,7 @@ After having downloaded all the files above, navigate to the directory and launc
 ```console
 Read("launch.g");
 ```
-If this doesn't work you may try with the absolute path to the file "launch.g".
-The read command may throw an error saying "Error, Variable: 'DeclarePackage' must have a value", in which case you should exit the break loop with Ctrl+D, and repeat the command above.
+
 
 Suppose we want to compute the fusion rules for all group theoretical categories (G, H, omega, 1) for a fixed G and all possible H and omega.
 
@@ -30,13 +29,17 @@ fusion(G);
 This will print the fusion rules for all possible group theoretical fusion categories with G the dihedral group of size 8. For each group theoretical category it will also write the dimensions and the fusion rules to a file.
 
 Suppose we have a specific G and H, then we can do the following
-
-
-```console
+```
 G:=SmallGroup(8, 3);
 H:= SubgroupsUptoAutomorphism(G)[1];
+fusion(G, H);
+```
+This computes fusion rules for all group theoretical categories with that specific group and subgroup.
+
+Further if we choose a specific cocycle
+````
 coho:=GHCoho(G, H, 3)[2];
-GTCat(G, H, coho);
+fusion(G, H, coho);
 ```
 This will print the fusion rules for the group theoretical data (G, H, coho, 1).
 
