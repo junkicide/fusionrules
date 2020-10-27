@@ -5,16 +5,20 @@
 
 # fusionrules
 
-This is a GAP program to compute fusion rules for group-theoretical fusion categories. The theory explaining the algorithms used will be available on the arxiv soon enough. 
-
+This is a GAP program to compute fusion rules for group-theoretical fusion categories. The theory explaining the algorithm used is explained in chapter 4 of my PhD thesis, which can be found in the [thesis](https://github.com/junkicide/thesis/) repository.
 ## Instructions
+
+Requires
+- GAP 4.11.0
+- the hapcocyclic package
 
 After having downloaded all the files above, navigate to the directory and launch GAP from there. Load the launch.g file as follows
 
 ```console
 Read("launch.g");
 ```
-This may throw an error, in which case repeating the same command works.
+If this doesn't work you may try with the absolute path to the file "launch.g".
+The read command may throw an error saying "Error, Variable: 'DeclarePackage' must have a value", in which case you should exit the break loop with Ctrl+D, and repeat the command above.
 
 Suppose we want to compute the fusion rules for all group theoretical categories (G, H, omega, 1) for a fixed G and all possible H and omega.
 
@@ -23,6 +27,17 @@ G:=SmallGroup(8, 3);
 fusion(G);
 ```
 
-This will print the fusion rules for all possible group theoretical fusion categories with G the dihedral group of size 8. For each group theoretical category it will also write the dimensions and the fusion rings to a file.
+This will print the fusion rules for all possible group theoretical fusion categories with G the dihedral group of size 8. For each group theoretical category it will also write the dimensions and the fusion rules to a file.
+
+Suppose we have a specific G and H, then we can do the following
 
 
+```console
+G:=SmallGroup(8, 3);
+H:= SubgroupsUptoAutomorphism(G)[1];
+coho:=GHCoho(G, H, 3)[2];
+GTCat(G, H, coho);
+```
+This will print the fusion rules for the group theoretical data (G, H, coho, 1).
+
+Please get in touch if you have any questions or want to report a bug.
