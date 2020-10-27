@@ -1,0 +1,38 @@
+sort:=function()
+    for j in [2..30] do
+        dirname:=Concatenation(String(j), "/");
+        dc:= Filtered(DirectoryContents(dirname), x-> not x= "." and not x="..");
+        allclasses:=[];
+        while not dc=[] do
+            Read(Concatenation(dirname, dc[1]));
+            dimvec1:=data[2];
+            fring1:=data[1];
+            classlist:=[data, [dc[1]]];
+            Remove(filtereddc, 1);
+            for k in [1..Size(dc)] do
+                Read(Concatenation(dirname, dc[k]));
+                dimvec2:=data[2];
+                fring2:=data[1];
+                bool:=SameFusion(dimvec1, fring1, dimvec2, fring2);
+                if bool=true then
+                    Add(classlist[2], dc[k]);
+                    Remove(dc, k);
+                fi;
+             od;
+            Add(allclasses, classlist);
+        od;
+        PrintTo(Concatenation(dirname, "collected"), Size(allclasses));
+        AppendTo(Concatenation(dirname, "collected"), allclasses);
+    od;
+end;
+
+                     
+           
+            
+            
+            
+                
+                    
+                
+                
+                

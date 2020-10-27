@@ -1,3 +1,3 @@
-Read("gapstart.g");
-Read("code.g");
-Read("code.g");
+LoadPackage("hap");
+Read("pkg/hapcocyclic/gap/ccgroup.gi");
+Read("fusion/code.g");
