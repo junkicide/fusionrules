@@ -26,7 +26,7 @@ G:=SmallGroup(8, 3);
 fusion(G);
 ```
 
-This will print the fusion rules for all possible group theoretical fusion categories with G the dihedral group of size 8. For each group theoretical category it will also write the dimensions and the fusion rules to a file.
+This will print the fusion rules for all possible group theoretical fusion categories with G the dihedral group of size 8. 
 
 Suppose we have a specific G and H, then we can do the following
 ```
@@ -37,10 +37,10 @@ fusion(G, H);
 This computes fusion rules for all group theoretical categories with that specific group and subgroup.
 
 Further if we choose a specific cocycle
-````
+```
 coho:=GHCoho(G, H, 3)[2];
 fusion(G, H, coho);
 ```
 This will print the fusion rules for the group theoretical data (G, H, coho, 1).
 
-Please get in touch if you have any questions or want to report a bug.
+In case there are issues, you may try to edit the launch.g file so that the relative paths to the files in question are correct. In case the problem still persists, please do get in touch! Suggestions and improvements are welcome.
