@@ -14,14 +14,14 @@ Requires
 
 After having downloaded all the files above, navigate to the directory and launch GAP from there. Load the launch.g file as follows
 
-```console
+```
 Read("launch.g");
 ```
 
 
 Suppose we want to compute the fusion rules for all group theoretical categories (G, H, omega, 1) for a fixed G and all possible H and omega.
 
-```console
+```
 G:=SmallGroup(8, 3);
 fusion(G);
 ```
