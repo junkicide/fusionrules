@@ -1,9 +1,5 @@
-
-
 InstallMethod( OneMutable,true,[IsCcElement],0,c -> One(InCcGroup(c)) );
 #R1^(-1)*(I*(C1*x))
-
-
 
 ComplementIntMatWithTransforms:=function( full,sub )
 local F, S, M, r, T, c, R;
@@ -169,8 +165,9 @@ end;
 #& proj #&
 
 ProjectiveCharacters:=function(G,alpha,o)
-local A,r,Ga,Gaa,ire,t,lift,testpro;
-
+    local A,r,Ga,Gaa,ire,t,lift,testpro, cocvals;
+    
+cocvals:=function(alpha,G) local x,y; for x in G do for y in G do Print(alpha(x,y),",");od;od;end;
 # we represent the cyclic group as a G-Outer group
 
 A:=GOuterGroup();
@@ -682,7 +679,7 @@ end;
 
 
 
-char:= function (simple, cocyclev,lstG,  H, z, s, exp) # gives the character of a couple (z,s) where z, s in G
+char:= function (simple, cocyclev,lstG, H, z, s, exp) # gives the character of a couple (z,s) where z, s in G
     local flag, d, rcrep, x, l, chi, h, posG;
     posG:=function(g) return Position(lstG, g);
           end;
@@ -707,7 +704,7 @@ local charvalue, a, posG;
     charvalue:= 0;
 for a in simple1!.rcreps do
 	if s in CosetStab(H, a) then
-	charvalue := charvalue + E(exp)^(- cocyclev[posG(a)][posG(a^-1*s*a)][posG(a^-1*g)] + cocyclev[posG(s)][posG(a)][posG(a^-1*g)])*char(simple1, cocyclev, lstG,  H, a, s, exp)*char(simple2, cocyclev, lstG, H, a^-1*g, a^-1*s*a, exp);fi;
+	charvalue := charvalue + E(exp)^(+ cocyclev[posG(a)][posG(a^-1*s*a)][posG(a^-1*g)] - cocyclev[posG(s)][posG(a)][posG(a^-1*g)])*char(simple1, cocyclev, lstG,  H, a, s, exp)*char(simple2, cocyclev, lstG, H, a^-1*g, a^-1*s*a, exp);fi;
 od;
 return charvalue;
 end;
@@ -734,7 +731,7 @@ dsd := function (no1, no2, Simples, H, omega, lstG, exp)
 local totalvect, item, decomp;
 totalvect:=[];
 for item in [1..Size(Simples!.simples)] do
- 	decomp:=multiplicity(no1, no2, item, Simples, H, omega, lstG, exp);
+	decomp:=multiplicity(no1, no2, item, Simples, H, omega, lstG, exp);
  	Add(totalvect, decomp); 
  	od;
 return totalvect;
@@ -752,9 +749,6 @@ for i in [1..Size(Simples!.simples)] do
 	od;
 return FusionRing;
 end;
-
-
-
 
 SubgroupHomotopy:=function ( RG, RH, chainmap, word )
     local n,f,Elts, Mult, g, lambda, ContractingHomotopy, firstterm, SubHom, secondterm;
@@ -902,8 +896,8 @@ od;
 return Lcm(List(list,x->x[1]*x[2]));
 end;
 
-fusion :=function (arg...)
-    local G,  R, K, UCT, exponent, fring,g, h, k,  subcomp, comp, cocycletest, H, allcoho, coho, coblist, i, f, adapted, Simples, filename, cochlist, UCTH, j ,mu, diff, nontrivindex, newmu, htpystdcocycle, extendedhtpystdcocycle, sc, cobnewmu, cobht, cocyclefn, expH, homology, modhom, hcohomod, hcoho, hcocycles, Hcocyclefnlist, x, extendedx, cobx, dimlist, listG, adaptedv, fsi, fsexp;
+newfusion :=function (arg...)
+local G,  R, K, UCT, exponent, fring,g, h, k,  subcomp, comp, cocycletest, H, allcoho, coho, coblist, i, f, adapted, Simples, filename, cochlist, UCTH, j ,mu, diff, nontrivindex, newmu, htpystdcocycle, extendedhtpystdcocycle, sc, cobnewmu, cobht, cocyclefn, expH, homology, modhom, hcohomod, hcoho, hcocycles, Hcocyclefnlist, x, extendedx, cobx, dimlist, listG, adaptedv, fsi, fsexp;
 G:=arg[1];
 listG:=EnumeratorSorted(G);
 R:=ResolutionFiniteGroup(G, 4);
@@ -918,11 +912,11 @@ for comp in subcomp do
     	allcoho := List(StabHOrbitsCocycles(G, R, K, UCT, comp, 3), x-> x[1]);
     coho:= CohomologyList(G, R, K, UCT, comp, allcoho, 3);
     fi;
-        coblist:= CoboundaryList(UCT, comp, coho, 3);
+    coblist:= CoboundaryList(UCT, comp, coho, 3);
 	nontrivindex:=[];
         UCTH:=UniversalCoefficientsTheorem(comp!.complex, 2);
         expH:=UCTH!.exponent;
-        if UCTH!.hombasis=[] then hcocycles:= []; 
+        if UCTH!.hombasis=[] then hcocycles:= [];
             else
 	modhom:=List(UCTH!.hombasis, x->rcv(x,expH));
 	hcohomod:=NearAdditiveGroup(modhom);
@@ -930,13 +924,11 @@ for comp in subcomp do
 	hcocycles:=List(hcoho, x-> exponent*(UCTH!.lift*x));
         Hcocyclefnlist:= List(hcocycles, x-> StandardCocycle(comp!.resolution, x, 2, exponent*expH));fi;
         for i in [1..Size(coho)] do if not Set(coblist[i])=[0] then Add(nontrivindex, i); else
-	
-	htpystdcocycle:= HomotopyStandardCocycle(R, comp!.resolution, comp!.Rchainmap, (UCT!.lift*coho[i]) mod (expH*exponent), 2, expH*exponent);
+	htpystdcocycle:= HomotopyStandardCocycle(R, comp!.resolution, comp!.Rchainmap, expH*(UCT!.lift*coho[i]) mod (expH*exponent), 2, expH*exponent);
 		extendedhtpystdcocycle:= function (g, h) if not g in H or not h in H then return 0; else return htpystdcocycle(g, h);fi;end;
 		sc:=StandardCocycle(R, expH*(UCT!.lift*coho[i]) mod (expH*exponent), 3, expH*exponent);
 		cobht:=coboundary (extendedhtpystdcocycle);
                 if hcocycles=[] then    	
-                   
           	    cocyclefn:= function (g,h,k) return sc(g, h, k) - cobht(g, h, k);end;
                 adapted:= AdaptedCocycle1(G, R, H, cocyclefn);
 		#  cocycletest:=IsAdaptedCocycle(G, H, adapted, expH*exponent);
@@ -944,37 +936,36 @@ for comp in subcomp do
 	#	Print("\n");
 		Simples:= SimplesGenerator(G, R, K, H, adapted, expH*exponent, 3);
                 fsexp:=ExponentOfPFC(G, R, K, UCT, coho[i]);
-            fsi:=FSIforAGT(G, Simples!.simples, H, adapted, expH*exponent, fsexp);
-	       dimlist:= List(Simples!.simples, x-> x!.dim);
+                fsi:=FSIforAGT(G, Simples!.simples, H, adapted, expH*exponent, fsexp);
+	        dimlist:= List(Simples!.simples, x-> x!.dim);
              #  Print(dimlist);
              #  PrintTo(filename,dimlist);
-               adaptedv:=CocycleValues(listG, adapted, exponent*expH);
+                adaptedv:=CocycleValues(listG, adapted, exponent*expH);
 		fring:=FusionRules(Simples, H, adaptedv,listG, exponent*expH);
-	   filename:= [IdGroup(G), IdGroup(H),coho[i],[] ];
+	        filename:= [IdGroup(G), IdGroup(H),coho[i],[] ];
 		Print([filename, fring, dimlist, fsi], ",\n");
                     else for x in [1..Size(Hcocyclefnlist)] do
-                      
                 extendedx:= function (g, h) if not g in H or not h in H then return 0;
                                                 else return Hcocyclefnlist[x](g, h);fi;
                                                    end;
                     cobx:=coboundary(extendedx);
           	    cocyclefn:= function (g,h,k) return sc(g, h, k)  - cobx(g, h, k) - cobht(g, h, k);end; 
+                    for g in H do for h in H do for k in H do if not (cocyclefn(g, h, k)) mod (exponent*expH) = 0 then Print("error");fi;od;od;od;
                 adapted:= AdaptedCocycle1(G, R, H, cocyclefn);
-		#  cocycletest:=IsAdaptedCocycle(G, H, adapted, expH*exponent);
-	#	Print(cocycletest);
-	#	Print("\n");
+		cocycletest:=IsAdaptedCocycle(G, H, adapted, expH*exponent);
+		Print(cocycletest);
+		Print("\n");
 		Simples:= SimplesGenerator(G, R, K, H, adapted, expH*exponent, 3);
                 fsexp:=ExponentOfPFC(G, R, K, UCT, coho[i]);
-          fsi:=FSIforAGT(G, Simples!.simples, H, adapted, expH*exponent, fsexp);
-               dimlist:= List(Simples!.simples, x-> x!.dim);
-	   adaptedv:=CocycleValues(listG, adapted, exponent*expH); 
-	   fring:=FusionRules(Simples, H, adaptedv, listG, exponent*expH);
-           filename:= [IdGroup(G), IdGroup(H),coho[i], hcoho[x]];
-            Print([filename, fring, dimlist, fsi], ",\n");
+                fsi:=FSIforAGT(G, Simples!.simples, H, adapted, expH*exponent, fsexp);
+                dimlist:= List(Simples!.simples, x-> x!.dim);
+	        adaptedv:=CocycleValues(listG, adapted, exponent*expH); 
+	        fring:=FusionRules(Simples, H, adaptedv, listG, exponent*expH);
+                filename:= [IdGroup(G), IdGroup(H),coho[i], hcoho[x]];
+                Print([filename, fring, dimlist, fsi], ",\n");
 	        od;
                 fi;fi;
-                                    
-                                       od;                                        
+                                       od;
 	if not nontrivindex =[] then
 	cochlist:=CochainList(comp, coblist, exponent, 3);
         for j in nontrivindex do
@@ -987,7 +978,6 @@ for comp in subcomp do
 		cobnewmu:= coboundary(newmu);
 		cobht:=coboundary (extendedhtpystdcocycle);
                 if hcocycles=[] then
-                  
           	    cocyclefn:= function (g,h,k) return sc(g, h, k) - cobnewmu(g, h, k) - cobht(g, h, k);end;
                 adapted:= AdaptedCocycle1(G, R, H, cocyclefn);
 	#	  cocycletest:=IsAdaptedCocycle(G, H, adapted, expH*exponent);
@@ -1002,8 +992,7 @@ for comp in subcomp do
 		fring:=FusionRules(Simples, H, adaptedv, listG, exponent*expH);
                  filename:= [IdGroup(G), IdGroup(H),coho[j],[] ];
 	  Print([filename, fring, dimlist, fsi], ",\n");
-                    else for x in [1..Size(Hcocyclefnlist)] do
-                      
+                    else for x in [1..Size(Hcocyclefnlist)] do                      
                 extendedx:= function (g, h) if not g in H or not h in H then return 0;
                                                 else return Hcocyclefnlist[x](g, h);fi;
                                                    end;
@@ -1016,8 +1005,7 @@ for comp in subcomp do
 		Simples:= SimplesGenerator(G, R, K, H, adapted, expH*exponent, 3);
                 fsexp:=ExponentOfPFC(G, R, K, UCT, coho[j]);
             fsi:=FSIforAGT(G, Simples!.simples, H, adapted, expH*exponent, fsexp);
-	dimlist:= List(Simples!.simples, x-> x!.dim);
-            
+	dimlist:= List(Simples!.simples, x-> x!.dim); 
         adaptedv:=CocycleValues(listG, adapted, exponent*expH);
 		fring:=FusionRules(Simples, H, adaptedv, listG, exponent*expH);
 	  filename:= [IdGroup(G), IdGroup(H),coho[j], hcoho[x]];
@@ -1040,7 +1028,7 @@ local j;
 end;
 
 coblistprint :=function (G)
-local R, K, UCT, exponent, fring, subcomp, comp, cocycletest, H, allcoho, coho, coblist, i, f, adapted, Simples, filename, cochlist, UCTH, j ,mu, diff, nontrivindex, newmu, htpystdcocycle;
+local R, K, UCT, exponent, fring, subcomp, comp, cocycletest, H, allcoho, coho, coblist, i, f, adapted, Simples, filename, cochlist, UCTH, j,mu, diff, nontrivindex, newmu, htpystdcocycle;
 R:=ResolutionFiniteGroup(G, 4);
 K:=TensorWithIntegers(R);
 UCT:=UniversalCoefficientsTheorem(K, 3);
