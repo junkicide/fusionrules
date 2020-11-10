@@ -447,7 +447,7 @@ local 	H,
 H:=comp!.subgroup;
 KH:=comp!.complex;
 f:= comp!.chainmap;
-M:=GroupCohomologyFunctor(KH, K, f, 3)!.matrix;
+M:=GroupCohomologyFunctor(KH, K, f, n)!.matrix;
 
 
 rcv:=function(x,exp) 
@@ -463,7 +463,7 @@ autmat:=List(
           GroupCohomologyFunctor(
            K,K,TensorWithIntegers(
 	    EquivariantChainMap(R,R,phi)),
-           3)!.matrix));
+           n)!.matrix));
 autmat:=List(
          autmat,x->List(
                     x,y->rcv(y,UCT!.exponent)));
@@ -938,8 +938,7 @@ for comp in subcomp do
                 fsexp:=ExponentOfPFC(G, R, K, UCT, coho[i]);
                 fsi:=FSIforAGT(G, Simples!.simples, H, adapted, expH*exponent, fsexp);
 	        dimlist:= List(Simples!.simples, x-> x!.dim);
-             #  Print(dimlist);
-             #  PrintTo(filename,dimlist);
+            
                 adaptedv:=CocycleValues(listG, adapted, exponent*expH);
 		fring:=FusionRules(Simples, H, adaptedv,listG, exponent*expH);
 	        filename:= [IdGroup(G), IdGroup(H),coho[i],[] ];
@@ -950,7 +949,6 @@ for comp in subcomp do
                                                    end;
                     cobx:=coboundary(extendedx);
           	    cocyclefn:= function (g,h,k) return sc(g, h, k)  - cobx(g, h, k) - cobht(g, h, k);end; 
-                    for g in H do for h in H do for k in H do if not (cocyclefn(g, h, k)) mod (exponent*expH) = 0 then Print("error");fi;od;od;od;
                 adapted:= AdaptedCocycle1(G, R, H, cocyclefn);
 		cocycletest:=IsAdaptedCocycle(G, H, adapted, expH*exponent);
 		Print(cocycletest);
@@ -1281,20 +1279,4 @@ comp:=subcomp[grpno];
                  fi;
        	od;
         fi;
-        
-
 end;
-
-
-samplechar := function (simples, cocyclev, lstG, H, z, s, exp)
-    return 2*char(simples[1], cocyclev, lstG, H, z, s, exp) + 3*char(simples[2], cocyclev, lstG, H, z, s, exp) + 4*char(simples[3], cocyclev, lstG, H, z, s, exp);
-end;
-
-for d in G do
-   S:=CosetStab(H,d);
-   s:=Size(S);
-      for b in sim do
-         Print(Sum(S,x->samplechar(sim,adaptedv,listG,H,d,x,UCT!.exponent)*ComplexConjugate(char(b,adaptedv,listG,H,d,x,UCT!.exponent)))/s,",");
-      od;
-      Print("\n");
-   od;
